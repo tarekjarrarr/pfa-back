@@ -5,9 +5,19 @@ const swaggerUI=require('swagger-ui-express');
 const mongoose=require('mongoose');
 const bp = require('body-parser');
 require('dotenv').config();
-
 //set app
 var app = express();
+
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
+
+//import route files
+const usersRoute=require('./routes/users.route');
+const companiesRoute=require('./routes/companies.route');
+const topicsRoute=require('./routes/topics.route');
+const profilesRoute=require('./routes/profiles.route');
+
+
 
 
 //Swagger API Documentation 
@@ -32,6 +42,10 @@ mongoose
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error("Could not connect to MongoDB..."));
 
-
+//use routes
+app.use("/api/users",usersRoute);
+app.use("/api/companies",companiesRoute);
+app.use("/api/topics",topicsRoute);
+app.use("/api/profiles",profilesRoute);
 
 

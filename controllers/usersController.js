@@ -54,7 +54,7 @@ exports.authenticate=async function(req,res){
         return;
     }
     const token = jwt.sign({ _id: user._id,fullname:user.fullname,email:user.email, role:user.role},process.env.myprivatekey);
-    res.header("x-access-token", token).send(token); 
+    res.send({token});
 };
 
 exports.userProfile = async function(req, res){

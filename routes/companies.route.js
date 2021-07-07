@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/getAll',companiesController.getAllCompanies);
 router.get('/details/:id',companiesController.detailsCompany);
+router.get('/getByName/:name',companiesController.getByName);
 router.post('/search',companiesController.searchCompanies);
 router.post('/recommendation',companiesController.recommendCompanies);
 router.get('/stats',companiesController.getStats);

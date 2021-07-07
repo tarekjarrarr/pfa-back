@@ -16,6 +16,15 @@ var ticketSchema= mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
           ref: 'User'
       }
+      ,
+      company:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Company'
+      },
+      topic:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Topic"
+      }
 });
 
 

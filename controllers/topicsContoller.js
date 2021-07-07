@@ -6,7 +6,7 @@ var moment = require('moment-timezone');
 const { result } = require('lodash');
 
 exports.getAllTopics=async function(req,res){
-    const topics=await Topic.find().sort({created:'desc'}).populate('creator').populate('companies.company').populate('companies.tickets');
+    const topics=await Topic.find().sort({created:'desc'}).populate('creator').populate('companies.company').populate('companies.tickets').populate('addedBy');
     if(!topics){res.status(400).send('foud problems retrieving topics list');}
     else{res.status(200).send(topics);}
 }
@@ -36,12 +36,12 @@ exports.deleteTopic=async function(req,res){
 
 exports.createTopic=async function(req,res){
     //validate input
-    const {error}=validateTopic(req.body);
-    if (error) {console.log(error.details[0]); return res.status(400).send(error.details[0].message);}
+   /*  const {error}=validateTopic(req.body);
+    if (error) {console.log(error.details[0]); return res.status(400).send(error.details[0].message);} */
     //verify if topic with exact name exists
     const topicExists=await Topic.findOne({title:req.body.title});
     if(topicExists){
-        res.send(400).send('topic with this name already exists');
+        res.status(400).send('topic with this name already exists');
     }
     //verify the existance of the creator
     if(req.body.creator){
@@ -156,7 +156,9 @@ exports.addTicket=async function(req,res){
     const ticket=new Ticket({
         title:req.body.title,
         date:moment.tz(moment(req.body.date),'Africa/Tunis').format('DD/MM/YYYY'),
-        addedBy:req.body.addedBy
+        addedBy:req.body.addedBy,
+        company:req.params.companyId,
+        topic:req.params.topicId
     })
 
     titleExists=false;
@@ -172,7 +174,7 @@ exports.addTicket=async function(req,res){
                 ticket.save();
                 element.tickets.push(ticket)
                 topic.save();
-                return res.status(200).send("ticket added successfully!").json(ticket);};
+                return res.status(200).send("ticket added successfully!").send(ticket);};
         }); 
     }
 }
@@ -219,7 +221,21 @@ exports.getStats=async function(req,res){
   }
 
 
+exports.getTicketsOfCompanyTopic=async function (req,res){
+    //verify the existance of the company
+    const company=await Company.findById(req.params.companyId);
+    if(!company){return res.status(404).send('The company with the given ID was not found.');}
 
+    //verify the existance of the topic
+    const topic=await Topic.findById(req.params.topicId);
+    if (!topic) {return res.status(404).send('The topic with the given ID was not found.');}
+
+    
+    const tickets =await Ticket.find({"company":req.params.companyId,"topic":req.params.topicId}).populate('addedBy');
+    console.log(tickets);
+    
+    res.send(tickets);
+}
     
 
 

@@ -8,8 +8,16 @@ require('dotenv').config();
 //set app
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods",'*')
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,authorization,*");
+  next();
+});
+
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
+
 
 //import route files
 const usersRoute=require('./routes/users.route');

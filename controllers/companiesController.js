@@ -36,18 +36,19 @@ exports.getAllCompanies=async function(req,res){
 }
 
 exports.searchCompanies=async function(req,res){
-    const page = parseInt(req.params.page)
-    const limit = parseInt(req.params.limit)
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     var results = {}
 
     try{
+      
       const locationRegex = new RegExp(req.body.location, 'i');
       const industryRegex = new RegExp(req.body.industry, 'i');
       const typeRegex = new RegExp(req.body.type, 'i');
       const companiesizeRegex = new RegExp(req.body.company_size, 'i');
-    
+
       if(req.body.specialties)
         {
           results.results = await Company.find({$text:{$search:"\""+req.body.specialties.join("\"\,\"")+"\""}})
@@ -64,7 +65,7 @@ exports.searchCompanies=async function(req,res){
                                       .count();
           }
       else 
-        {
+        { 
           results.results = await Company.find({})
                                     .where('industry').equals(industryRegex)
                                     .where('type').equals(typeRegex)
@@ -102,6 +103,7 @@ exports.recommendCompanies=async function(req,res){
     url: 'http://127.0.0.1:1080/predict',
     method: 'POST',
     json: {
+      "overview.name":req.body.name,
       "overview.company_size":req.body.company_size,
       "overview.industry":req.body.industry,
       "overview.type":req.body.type,
@@ -160,8 +162,16 @@ exports.detailsCompany=async function(req,res){
     if (!company) return res.status(404).send('Could not find a company with this id.');
     res.status(200).send(company); 
 }catch(e){res.send(e.message)}
-  
 }
+
+exports.getByName=async function(req,res){
+  try{
+    const company = await Company.find({"name":req.params.name});
+    if (!company) return res.status(404).send('Could not find a company with this name.');
+    res.status(200).send(company[0]); 
+}catch(e){res.send(e.message)}
+}
+
 
 exports.getStats=async function(req,res){
   var nbCompanies=0;
@@ -169,4 +179,5 @@ exports.getStats=async function(req,res){
   catch (e){console.log(e);}
   res.status(200).send((nbCompanies).toString());
 }
+
 

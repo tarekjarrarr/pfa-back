@@ -12,7 +12,8 @@ router.delete('/deleteFromTopic/:companyId/:topicId',topicsController.deleteComp
 router.get('/getCompaniesByTopic/:id',topicsController.getCompaniesByTopic);
 router.get('/getTopicsByCompany/:id',topicsController.getTopicsByCompany);
 router.post('/addTicket/:topicId/:companyId',topicsController.addTicket);
-router.delete('/deleteTicket/:ticketId/:topicId/:companyId',topicsController.deleteTicket);
+router.get('/CompanyTopicTickets/:topicId/:companyId',topicsController.getTicketsOfCompanyTopic);
+router.delete('/deleteTicket/:topicId/:companyId/:ticketId',topicsController.deleteTicket);
 router.get('/detailsTicket/:id',topicsController.detailsTicket);
 router.get('/stats',topicsController.getStats);
 

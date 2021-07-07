@@ -48,8 +48,8 @@ function validateTopic(topic) {
     const schema = {
       title: Joi.string().required(),
       description: Joi.string().required(),
-      status: Joi.string().valid('open','closed'),
-      creator: Joi.objectId().required()
+      /* status: Joi.string().valid('open','closed'),*/
+      creator: Joi.objectId().required() 
     };  
     return Joi.validate(topic, schema);  }
 

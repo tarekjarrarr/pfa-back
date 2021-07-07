@@ -7,6 +7,7 @@ W-selling is a solution aiming to make commercials work inside a company easier 
 
 Project is created with:
 * Nodejs version: 14.16.1
+* Angular version: 11.2.14
 * Express version: 4.17.1
 * mongoose version: 5.12.10
 

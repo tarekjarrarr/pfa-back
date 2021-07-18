@@ -41,6 +41,8 @@ app.use(bp.urlencoded({ extended: true }))
 const port = process.env.PORT || "3000";
 app.set("port", port); 
 console.log(port);
+
+
 //server
 app.listen(port, () => console.log(`Server running on :${port}`));
 
